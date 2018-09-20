@@ -55,18 +55,16 @@ resources:
   requests:
     cpu: 600m
     memory: 968Mi
-
-client-pvc:
-  enabled: false
-  storageClass: default
-  storageSize: 1Gi
-
-server-pvc:
-  enabled: false
-  storageClass: default
-  storageSize: 1Gi
+pvc:
+  server:
+    enabled: false
+    storageClass: default
+    storageSize: 1Gi
+  client:
+    enabled: false
+    storageClass: default
+    storageSize: 1Gi
   
-
 nodeSelector: {}
 
 tolerations: []

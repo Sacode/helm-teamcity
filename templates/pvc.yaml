@@ -1,26 +1,26 @@
-{{- if .Values.client-pvc.enabled -}}
+{{- if .Values.pvc.client.enabled -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ default (include "teamcity.fullname" .) }}-agent-data
 spec:
-  storageClassName: {{ .Values.client-pvc.storageClass }}
+  storageClassName: {{ .Values.pvc.client.storageClass }}
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.client-pvc.storageSize }}
+      storage: {{ .Values.pvc.client.storageSize }}
 {{- end }}
-{{- if .Values.server-pvc.enabled -}}
+{{- if .Values.pvc.server.enabled -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ default (include "teamcity.fullname" .) }}-server-data
 spec:
-  storageClassName: {{ .Values.server-pvc.storageClass }}
+  storageClassName: {{ .Values.pvc.server.storageClass }}
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.server-pvc.storageSize }}
+      storage: {{ .Values.pvc.server.storageSize }}
 {{- end }}

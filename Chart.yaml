@@ -8,5 +8,5 @@ icon: https://i1.wp.com/www.stefreitag.de/wp/wp-content/uploads/2018/08/logo.png
 sources:
 - github.com/dmitrii-ageev/helm-teamcity-chart/
 maintainers:
-- name: Dmitrii Ageev
+- name: dmitrii-ageev
   email: d.ageev@gmail.com

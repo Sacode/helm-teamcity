@@ -25,15 +25,15 @@ spec:
     servicePort: {{ $servicePort }}
 {{-   end -}}
 {{-   if .Values.ingress.hosts }}
-rules:
+  rules:
 {{-     range $host := .Values.ingress.hosts }}
-  - host: {{ $host | quote }}
-    http:
-      paths:
-        - path: {{ $.Values.ingress.path }}
-          backend:
-            serviceName: {{ $serviceName }}
-            servicePort: {{ $servicePort }}
+    - host: {{ $host | quote }}
+      http:
+        paths:
+          - path: {{ $.Values.ingress.path }}
+            backend:
+              serviceName: {{ $serviceName }}
+              servicePort: {{ $servicePort }}
 {{-     end -}}
 {{-   end -}}
 {{-   if .Values.ingress.tls }}

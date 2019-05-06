@@ -46,13 +46,13 @@ replicaCount: 1
 
 image:
   repository: jetbrains/teamcity-server
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 service:
   name: teamcity
   type: NodePort
   internalPort: 8111
-  externalPort: 8111
+  externalPort: 80
   annotations: {}
 
 ingress:

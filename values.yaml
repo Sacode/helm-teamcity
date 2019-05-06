@@ -49,8 +49,11 @@ image:
   pullPolicy: Always
 
 service:
+  name: teamcity
   type: NodePort
-  port: 8111
+  internalPort: 8111
+  externalPort: 8111
+  annotations: {}
 
 ingress:
   enabled: true

@@ -31,8 +31,8 @@ spec:
             - name:  server-data
               mountPath: /data/teamcity_server/datadir
           ports:
-            - name: http
-              containerPort: 8111
+            - name: {{ .Release.name }}
+              containerPort: {{ .Values.service.internalPort }}
               protocol: TCP
           resources:
 {{ toYaml .Values.resources | indent 12 }}

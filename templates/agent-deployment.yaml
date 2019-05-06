@@ -29,7 +29,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: SERVER_URL
-              value: "http://{{ template "teamcity.fullname" . }}:8111"
+              value: "http://{{ template "teamcity.fullname" . }}:{{ .Values.service.internalPort }}"
           volumeMounts:
             - name:  agent-data
               mountPath: /data/teamcity_agent/conf

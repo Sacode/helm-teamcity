@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled -}}
 {{-   $serviceName := include "teamcity.fullname" . -}}
-{{-   $servicePort := .Release.Name + "-HTTP" -}}
+{{-   $servicePort := "http" -}}
 {{-   $ingressPath := .Values.ingress.path -}}
 apiVersion: extensions/v1beta1
 kind: Ingress

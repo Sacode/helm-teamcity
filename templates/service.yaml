@@ -10,10 +10,10 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.externalPort }}
+    - name: {{ .Release.Name }}-HTTP
+      port: {{ .Values.service.externalPort }}
       targetPort: {{ .Values.service.internalPort }}
       protocol: TCP
-      name: {{ .Release.Name }}
   selector:
     app: {{ template "teamcity.name" . }}
     release: {{ .Release.Name }}

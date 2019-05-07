@@ -8,11 +8,10 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.Service.Type }}
   ports:
-    - name: http
-      port: {{ .Values.service.externalPort }}
-      targetPort: {{ .Values.service.internalPort }}
+    - name: teamcity
+      port: {{ .Values.Service.Port }}
       protocol: TCP
   selector:
     app: {{ template "teamcity.name" . }}

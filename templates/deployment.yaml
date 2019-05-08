@@ -24,7 +24,7 @@ spec:
             persistentVolumeClaim:
               claimName: {{ default (include "teamcity.fullname" .) }}-server-data
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ template "teamcity.fullname" }}
           image: {{ .Values.image.repository }}:{{ default "latest" .Chart.AppVersion }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
@@ -34,17 +34,39 @@ spec:
             - name: {{ .Release.name }}
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+{{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+{{- end }}
+{{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+{{- end }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
-    {{- with .Values.nodeSelector }}
+{{  toYaml .Values.resources | indent 12 }}
+{{- with .Values.nodeSelector }}
       nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.affinity }}
+{{    toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.affinity }}
       affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
+{{    toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.tolerations }}
       tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+{{    toYaml . | indent 8 }}
+{{- end }}

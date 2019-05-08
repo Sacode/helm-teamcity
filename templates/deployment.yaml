@@ -32,7 +32,7 @@ spec:
               mountPath: /data/teamcity_server/datadir
           ports:
             - name: {{ .Release.name }}
-              containerPort: {{ .Values.service.internalPort }}
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           resources:
 {{ toYaml .Values.resources | indent 12 }}

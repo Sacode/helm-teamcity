@@ -7,9 +7,9 @@ metadata:
     chart: {{ template "teamcity.chart" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-{{- if .Values.artifactory.service.annotations }}
+{{- if .Values.service.annotations }}
   annotations:
-{{   toYaml .Values.artifactory.service.annotations | indent 4 }}
+{{   toYaml .Values.service.annotations | indent 4 }}
 {{- end }}
 spec:
   type: {{ .Values.service.type }}

@@ -5,12 +5,16 @@ metadata:
   labels:
     app: {{ template "teamcity.name" . }}
     chart: {{ template "teamcity.chart" . }}
-    release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+{{- if .Values.artifactory.service.annotations }}
+  annotations:
+{{   toYaml .Values.artifactory.service.annotations | indent 4 }}
+{{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - name: teamcity
+    - name: {{ .Release.Name }}
       port: {{ .Values.service.port }}
       protocol: TCP
   selector:

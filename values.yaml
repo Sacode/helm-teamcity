@@ -101,13 +101,16 @@ resources:
     cpu: 600m
     memory: 968Mi
 
+## If the volume name is not set and enabled is true, a name is generated using the template
 pvc:
   server:
     enabled: true
+    name:
     storageClass: standard
     storageSize: 1Gi
   client:
     enabled: true
+    name:
     storageClass: standard
     storageSize: 1Gi
   

@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ default (include "teamcity.fullname" .) }}-server-data
+  name: {{ template "teamcity.serverVolumeName" . }}
 spec:
   storageClassName: {{ .Values.pvc.server.storageClass }}
   accessModes:

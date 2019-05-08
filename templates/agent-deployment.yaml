@@ -22,7 +22,7 @@ spec:
       volumes:
           - name: agent-data
             persistentVolumeClaim:
-              claimName: {{ default (include "teamcity.fullname" .) }}-agent-data
+              claimName: {{ template "teamcity.agentVolumeName" . }}
       containers:
         - name: {{ .Chart.Name }}-agent
           image: {{ .Values.agent.image.repository }}:{{ default "latest" .Chart.AppVersion }}

@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ default (include "teamcity.fullname" .) }}-agent-data
+  name: {{ template "teamcity.agentVolumeName" . }}
 spec:
   storageClassName: {{ .Values.pvc.client.storageClass }}
   accessModes:

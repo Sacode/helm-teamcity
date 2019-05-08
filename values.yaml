@@ -108,7 +108,7 @@ pvc:
     name:
     storageClass: standard
     storageSize: 1Gi
-  client:
+  agent:
     enabled: true
     name:
     storageClass: standard

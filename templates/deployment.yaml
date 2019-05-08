@@ -4,6 +4,7 @@ metadata:
   name: {{ template "teamcity.fullname" . }}
   labels:
     app: {{ template "teamcity.name" . }}
+    version: {{ .Chart.AppVersion }}
     chart: {{ template "teamcity.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}

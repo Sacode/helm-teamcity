@@ -4,6 +4,7 @@ metadata:
   name: {{ template "teamcity.fullname" . }}
   labels:
     app: {{ template "teamcity.name" . }}
+    version: {{ .Chart.AppVersion }}
     chart: {{ template "teamcity.chart" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
@@ -19,4 +20,5 @@ spec:
       protocol: TCP
   selector:
     app: {{ template "teamcity.name" . }}
+    version: {{ .Chart.AppVersion }}
     release: {{ .Release.Name }}

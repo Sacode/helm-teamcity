@@ -24,7 +24,7 @@ spec:
             persistentVolumeClaim:
               claimName: {{ template "teamcity.serverVolumeName" . }}
       containers:
-        - name: {{ template "teamcity.fullname" }}
+        - name: {{ template "teamcity.fullname" . }}
           image: {{ .Values.image.repository }}:{{ default "latest" .Chart.AppVersion }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:

@@ -52,11 +52,11 @@ Please change the values.yaml according to your setup
 | `ingress.annotations`                       | TeamCity Ingress annotations               | `{}`                          |
 | `ingress.hosts`                             | TeamCity Ingress hostnames                 | `[]`                          |
 | `ingress.tls`                               | TeamCity Ingress TLS configuration (YAML)  | `[]`                          |
-| `pvc.agent.create` | Indicates whether TeamCity agent data volume should be created      | `true`                        |
+| `pvc.agent.enabled` | Indicates whether a TeamCity agent data volume should be used      | `true`                        |
 | `pvc.agent.name`            | The name of the agent data volume to create        | Generated using the fullname template | 
 | `pvc.agent.storageClass`    | A storage class to use for the agent data volume           | `standard`                    |
 | `pvc.agent.storageSize`     | An agent data volume size                                  | `1Gi`                         |
-| `pvc.server.create` | Indicates whether TeamCity server data volume should be created    | `true`                        |
+| `pvc.server.enabled` | Indicates whether a TeamCity server data volume should be used    | `true`                        |
 | `pvc.server.name`            | The name of the server data volume to create      | Generated using the fullname template | 
 | `pvc.server.storageClass`    | A storage class to use for the server data volume         | `standard`                    |
 | `pvc.server.storageSize`     | An server data volume size                                | `1Gi`                         |

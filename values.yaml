@@ -29,6 +29,7 @@ rbac:
           - watch
           - list
 
+# Agent configuration
 agent:
   replicaCount: 1
   image:
@@ -41,12 +42,45 @@ agent:
     requests:
       cpu: 600m
       memory: 968Mi
-  
-replicaCount: 1
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
-image:
-  repository: jetbrains/teamcity-server
-  pullPolicy: IfNotPresent
+# Server configuration
+server:
+  replicaCount: 1
+  image:
+    pullPolicy: IfNotPresent
+    repository: jetbrains/teamcity-server
+    version: 2018.1.5
+  resources:
+    limits:
+      cpu: 800m
+      memory: 968Mi
+    requests:
+      cpu: 600m
+      memory: 968Mi
+  # Application liveness probe settings
+  livenessProbe:
+    enabled: true
+    path: /js/polyfills.js
+    initialDelaySeconds: 180
+    failureThreshold: 10
+    timeoutSeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+  # Application readiness probe settings
+  readinessProbe:
+    enabled: true
+    path: /js/polyfills.js
+    initialDelaySeconds: 60
+    failureThreshold: 10
+    timeoutSeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 service:
   name: teamcity
@@ -55,7 +89,7 @@ service:
   annotations: {}
 
 ingress:
-  enabled: true
+  enabled: false
   defaultBackend:
     enabled: true
   annotations:
@@ -63,59 +97,21 @@ ingress:
     kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: 2000m
   path: /*
-  hosts:
-    - teamcity.local
-# tls:
-#   # Secrets must be manually created in the namespace.
-#   - secretName: teamcity.local
-#     hosts:
-#       - teamcity.local
-# Put here any labels you'd like to see in the ingress configuration:
+  hosts: []
+  tls: []
+  # Put here any labels you'd like to see in the ingress configuration:
   labels:
-    # traffic-type: external
-
-# Application liveness and readyness probe settings
-livenessProbe:
-  enabled: true
-  path: /js/polyfills.js
-  initialDelaySeconds: 180
-  failureThreshold: 10
-  timeoutSeconds: 10
-  periodSeconds: 10
-  successThreshold: 1
-
-readinessProbe:
-  enabled: true
-  path: /js/polyfills.js
-  initialDelaySeconds: 60
-  failureThreshold: 10
-  timeoutSeconds: 10
-  periodSeconds: 10
-  successThreshold: 1
-
-resources:
-  limits:
-    cpu: 800m
-    memory: 968Mi
-  requests:
-    cpu: 600m
-    memory: 968Mi
 
 ## If the volume name is not set and enabled is true, a name is generated using the template
 pvc:
-  server:
-    enabled: true
-    name:
-    storageClass: standard
-    storageSize: 1Gi
   agent:
     enabled: true
     name:
-    storageClass: standard
+    storageClass: default
     storageSize: 1Gi
-  
-nodeSelector: {}
+  server:
+    enabled: true
+    name:
+    storageClass: default
+    storageSize: 1Gi
 
-tolerations: []
-
-affinity: {}

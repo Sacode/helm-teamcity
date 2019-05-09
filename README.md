@@ -2,7 +2,6 @@ TEAMCITY SERVER
 ===============
 
 This helm chart installs [TeamCity server](https://www.jetbrains.com/teamcity/).
-By default the installed version is 2018.1.5.
 
 
 ### Configuration
@@ -67,3 +66,8 @@ Please change the values.yaml according to your setup
 ```
 helm install --name teamcity ./helm-teamcity
 ```
+
+## Author
+
+ Dmitrii Ageev <d.ageev@gmail.com>
+ 

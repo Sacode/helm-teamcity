@@ -8,7 +8,7 @@ metadata:
   name: {{ $serviceName }}
   labels:
     app: {{ template "teamcity.name" . }}
-    version: {{ .Chart.AppVersion }}
+    version: {{ .Values.server.version }}
     chart: {{ template "teamcity.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}

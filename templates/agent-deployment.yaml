@@ -4,7 +4,7 @@ metadata:
   name: {{ template "teamcity.fullname" . }}-agent
   labels:
     app: {{ template "teamcity.name" . }}-agent
-    version: {{ .Chart.AppVersion }}
+    version: {{ .Values.server.version }}
     chart: {{ template "teamcity.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}

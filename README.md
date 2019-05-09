@@ -17,7 +17,6 @@ Please change the values.yaml according to your setup
 | `agent.replicaCount`      | Replica count for TeamCity agent deployment          | `1`                                   |
 | `agent.image.pullPolicy`  | Container pull policy                                | `IfNotPresent`                        |
 | `agent.image.repository`  | Container image                                      | `jetbrains/teamcity-server`           |
-| `agent.image.version`     | Container tag                                        |  `2018.1.5`                           |
 | `agent.resources.limits.cpu`      | TeamCity agent cpu limit                     | `800m`                                |
 | `agent.resources.limits.memory`   | TeamCity agent memory limit                  | `968Mi`                               |
 | `agent.resources.requests.cpu`    | TeamCity agent initial cpu request           | `600m`                                |

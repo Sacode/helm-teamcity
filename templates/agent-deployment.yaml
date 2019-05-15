@@ -4,7 +4,7 @@ metadata:
   name: {{ template "teamcity.fullname" . }}-agent
   labels:
     app: {{ template "teamcity.name" . }}-agent
-    version: {{ .Values.server.version }}
+    version: {{ .Values.server.image.version }}
     chart: {{ template "teamcity.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -26,7 +26,7 @@ spec:
               claimName: {{ template "teamcity.agentVolumeName" . }}
       containers:
         - name: {{ template "teamcity.fullname" . }}-agent
-          image: {{ .Values.agent.image.repository }}:{{ default "latest" .Values.server.version }}
+          image: {{ .Values.agent.image.repository }}:{{ default "latest" .Values.server.image.version }}
           imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
           env:
             - name: SERVER_URL

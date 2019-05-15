@@ -4,7 +4,7 @@ kind: RoleBinding
 metadata:
   labels:
     app: {{ template "teamcity.name" . }}
-    version: {{ .Values.server.version }}
+    version: {{ .Values.server.image.version }}
     chart: {{ template "teamcity.chart" . }}
     component: {{ template "teamcity.fullname" . }}
     heritage: {{ .Release.Service }}

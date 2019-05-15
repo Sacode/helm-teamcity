@@ -4,7 +4,7 @@ metadata:
   name: {{ template "teamcity.fullname" . }}
   labels:
     app: {{ template "teamcity.name" . }}
-    version: {{ .Values.server.version }}
+    version: {{ .Values.server.image.version }}
     chart: {{ template "teamcity.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -26,13 +26,13 @@ spec:
               claimName: {{ template "teamcity.serverVolumeName" . }}
       containers:
         - name: {{ template "teamcity.fullname" . }}
-          image: {{ .Values.server.image.repository }}:{{ default "latest" .Values.server.version }}
+          image: {{ .Values.server.image.repository }}:{{ default "latest" .Values.server.image.version }}
           imagePullPolicy: {{ .Values.server.image.pullPolicy }}
           volumeMounts:
             - name:  server-data
               mountPath: /data/teamcity_server/datadir
           ports:
-            - name: {{ .Release.name }}
+            - name: {{ template "teamcity.name" . }}-http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
 {{- if .Values.server.readinessProbe.enabled }}

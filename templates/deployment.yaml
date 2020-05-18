@@ -1,5 +1,5 @@
 apiVersion: apps/v1beta2
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ template "teamcity.fullname" . }}
   labels:
@@ -9,20 +9,26 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  serviceName: {{ template "teamcity.fullname" . }}
   selector:
     matchLabels:
       app: {{ template "teamcity.name" . }}
       release: {{ .Release.Name }}
+  volumeClaimTemplates:
+    - metadata:
+        name: server-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: "10Gi"
+        storageClassName: "gp2"
   template:
     metadata:
       labels:
         app: {{ template "teamcity.name" . }}
         release: {{ .Release.Name }}
     spec:
-      volumes:
-          - name: server-data
-            persistentVolumeClaim:
-              claimName: {{ default (include "teamcity.fullname" .) }}-server-data
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

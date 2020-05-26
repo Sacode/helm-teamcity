@@ -49,6 +49,11 @@ spec:
         runAsUser: 0
         runAsGroup: 0
         fsGroup: 0
+      volumes:
+        - name: agent-tmp
+          emptyDir: {}
+        - name: agent-work
+          emptyDir: {}
       containers:
         - name: {{ .Chart.Name }}-agent
           image: "{{ .Values.agent.image.repository }}:{{ .Values.agent.image.tag }}"
@@ -65,6 +70,10 @@ spec:
               mountPath: /data/teamcity_agent/conf
             - name:  dind-certs-client
               mountPath: /root/.docker
+            - name: agent-tmp
+              mountPath: /opt/buildagent/temp
+            - name: agent-work
+              mountPath: /opt/buildagent/work
           resources:
 {{ toYaml .Values.agent.resources | indent 12 }}
         - name: {{ .Chart.Name }}-agent-dind-sidecar
@@ -80,6 +89,10 @@ spec:
               mountPath: /certs/ca
             - name:  dind-certs-client
               mountPath: /certs/client
+            - name: agent-tmp
+              mountPath: /opt/buildagent/temp
+            - name: agent-work
+              mountPath: /opt/buildagent/work
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

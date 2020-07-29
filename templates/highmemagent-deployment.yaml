@@ -1,0 +1,108 @@
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ template "teamcity.fullname" . }}-highmemagent
+  labels:
+    app: {{ template "teamcity.name" . }}-highmemagent
+    chart: {{ template "teamcity.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.highmemagent.replicaCount }}
+  serviceName: {{ template "teamcity.fullname" . }}
+  selector:
+    matchLabels:
+      app: {{ template "teamcity.name" . }}-highmemagent
+      release: {{ .Release.Name }}
+  volumeClaimTemplates:
+    - metadata:
+        name: agent-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: "10Gi"
+        storageClassName: "gp2"
+    - metadata:
+        name: dind-certs-ca
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: "10Mi"
+        storageClassName: "gp2"
+    - metadata:
+        name: dind-certs-client
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: "10Mi"
+        storageClassName: "gp2"
+  template:
+    metadata:
+      labels:
+        app: {{ template "teamcity.name" . }}-highmemagent
+        release: {{ .Release.Name }}
+    spec:
+      securityContext:
+        runAsUser: 0    
+        runAsGroup: 0
+        fsGroup: 0
+      volumes:
+        - name: agent-tmp
+          emptyDir: {}
+        - name: agent-work
+          emptyDir: {}
+      containers:
+        - name: {{ .Chart.Name }}-highmemagent
+          image: "{{ .Values.highmemagent.image.repository }}:{{ .Values.highmemagent.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SERVER_URL
+              value: "http://{{ template "teamcity.fullname" . }}:8111"
+            - name: DOCKER_HOST
+              value: "tcp://localhost:2376"
+            - name: DOCKER_TLS_VERIFY
+              value: "1"
+          volumeMounts:
+            - name:  agent-data
+              mountPath: /data/teamcity_agent/conf
+            - name:  dind-certs-client
+              mountPath: /root/.docker
+            - name: agent-tmp
+              mountPath: /opt/buildagent/temp
+            - name: agent-work
+              mountPath: /opt/buildagent/work
+          resources:    
+{{ toYaml .Values.highmemagent.resources | indent 12 }}
+        - name: {{ .Chart.Name }}-highmemagent-dind-sidecar
+          image: docker:dind
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            privileged: true
+          env:
+            - name: DOCKER_TLS_CERTDIR
+              value: "/certs"
+          volumeMounts:
+            - name:  dind-certs-ca
+              mountPath: /certs/ca
+            - name:  dind-certs-client
+              mountPath: /certs/client
+            - name: agent-tmp
+              mountPath: /opt/buildagent/temp
+            - name: agent-work
+              mountPath: /opt/buildagent/work
+    {{- with .Values.highmemagent.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

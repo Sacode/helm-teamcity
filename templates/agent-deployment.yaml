@@ -93,7 +93,7 @@ spec:
               mountPath: /opt/buildagent/temp
             - name: agent-work
               mountPath: /opt/buildagent/work
-    {{- with .Values.nodeSelector }}
+    {{- with .Values.agent.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
     {{- end }}

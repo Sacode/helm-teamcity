@@ -18,11 +18,10 @@ agent:
     requests:
       cpu: 600m
       memory: 968Mi
-  nodeSelector:
-    beta.kubernetes.io/instance-type: t3.medium
+  nodeSelector: {}
 
 highmemagent:
-  replicaCount: 1
+  replicaCount: 0
   image:
     repository: jetbrains/teamcity-agent
     tag: latest
@@ -30,12 +29,11 @@ highmemagent:
   resources:
     limits:
       cpu: 800m
-      memory: 968Mi
+      memory: 20Gi
     requests:
       cpu: 600m
-      memory: 968Mi
-  nodeSelector:
-    beta.kubernetes.io/instance-type: t3.medium
+      memory: 16Gi
+  nodeSelector: {}
   
 replicaCount: 1
 

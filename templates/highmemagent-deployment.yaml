@@ -1,18 +1,19 @@
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ template "teamcity.fullname" . }}-agent
+  name: {{ template "teamcity.fullname" . }}-highmemagent
   labels:
-    app: {{ template "teamcity.name" . }}-agent
+    app: {{ template "teamcity.name" . }}-highmemagent
     chart: {{ template "teamcity.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  replicas: {{ .Values.agent.replicaCount }}
+  replicas: {{ .Values.highmemagent.replicaCount }}
   serviceName: {{ template "teamcity.fullname" . }}
   selector:
     matchLabels:
-      app: {{ template "teamcity.name" . }}-agent
+      app: {{ template "teamcity.name" . }}-highmemagent
       release: {{ .Release.Name }}
   volumeClaimTemplates:
     - metadata:
@@ -42,11 +43,11 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "teamcity.name" . }}-agent
+        app: {{ template "teamcity.name" . }}-highmemagent
         release: {{ .Release.Name }}
     spec:
       securityContext:
-        runAsUser: 0
+        runAsUser: 0    
         runAsGroup: 0
         fsGroup: 0
       volumes:
@@ -55,8 +56,8 @@ spec:
         - name: agent-work
           emptyDir: {}
       containers:
-        - name: {{ .Chart.Name }}-agent
-          image: "{{ .Values.agent.image.repository }}:{{ .Values.agent.image.tag }}"
+        - name: {{ .Chart.Name }}-highmemagent
+          image: "{{ .Values.highmemagent.image.repository }}:{{ .Values.highmemagent.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: SERVER_URL
@@ -74,9 +75,9 @@ spec:
               mountPath: /opt/buildagent/temp
             - name: agent-work
               mountPath: /opt/buildagent/work
-          resources:
-{{ toYaml .Values.agent.resources | indent 12 }}
-        - name: {{ .Chart.Name }}-agent-dind-sidecar
+          resources:    
+{{ toYaml .Values.highmemagent.resources | indent 12 }}
+        - name: {{ .Chart.Name }}-highmemagent-dind-sidecar
           image: docker:dind
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           securityContext:
@@ -93,7 +94,7 @@ spec:
               mountPath: /opt/buildagent/temp
             - name: agent-work
               mountPath: /opt/buildagent/work
-    {{- with .Values.agent.nodeSelector }}
+    {{- with .Values.highmemagent.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
     {{- end }}

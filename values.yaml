@@ -18,6 +18,22 @@ agent:
     requests:
       cpu: 600m
       memory: 968Mi
+  nodeSelector: {}
+
+highmemagent:
+  replicaCount: 0
+  image:
+    repository: jetbrains/teamcity-agent
+    tag: latest
+    pullPolicy: Always
+  resources:
+    limits:
+      cpu: 800m
+      memory: 20Gi
+    requests:
+      cpu: 600m
+      memory: 16Gi
+  nodeSelector: {}
   
 replicaCount: 1
 

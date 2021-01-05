@@ -93,6 +93,10 @@ spec:
               mountPath: /opt/buildagent/temp
             - name: agent-work
               mountPath: /opt/buildagent/work
+      {{- if .Values.agent.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.agent.imagePullSecrets | indent 8 }}
+      {{- end }}
     {{- with .Values.agent.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

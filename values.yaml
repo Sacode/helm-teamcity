@@ -7,6 +7,12 @@ agent:
     repository: jetbrains/teamcity-agent
     tag: latest
     pullPolicy: Always
+
+  ## Specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+  imagePullSecrets:
+
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -26,6 +32,12 @@ highmemagent:
     repository: jetbrains/teamcity-agent
     tag: latest
     pullPolicy: Always
+
+  ## Specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+  imagePullSecrets:
+
   resources:
     limits:
       cpu: 800m
@@ -41,6 +53,12 @@ image:
   repository: jetbrains/teamcity-server
   tag: latest
   pullPolicy: Always
+
+## Specify an array of imagePullSecrets.
+## Secrets must be manually created in the namespace.
+## ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+imagePullSecrets:
+
 
 service:
   type: ClusterIP

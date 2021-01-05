@@ -11,7 +11,7 @@ agent:
   ## Specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
-  imagePullSecrets:
+  imagePullSecrets: []
 
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
@@ -36,7 +36,7 @@ highmemagent:
   ## Specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
-  imagePullSecrets:
+  imagePullSecrets: []
 
   resources:
     limits:
@@ -57,8 +57,7 @@ image:
 ## Specify an array of imagePullSecrets.
 ## Secrets must be manually created in the namespace.
 ## ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
-imagePullSecrets:
-
+imagePullSecrets: []
 
 service:
   type: ClusterIP

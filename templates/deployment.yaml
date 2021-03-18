@@ -17,12 +17,16 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: server-data
+        {{- include "vault.dataStorage.annotations" . | nindent 6 }}
       spec:
-        accessModes: [ "ReadWriteOnce" ]
+        accessModes:
+          - {{ .Values.dataStorage.accessMode | default "ReadWriteOnce" }}
         resources:
           requests:
-            storage: "10Gi"
-        storageClassName: "gp2"
+            storage: {{ .Values.dataStorage.size }}
+          {{- if .Values.dataStorage.storageClass }}
+        storageClassName: {{ .Values.dataStorage.storageClass }}
+          {{- end }}
   template:
     metadata:
       labels:
@@ -53,4 +57,7 @@ spec:
     {{- with .Values.tolerations }}
       tolerations:
 {{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
     {{- end }}

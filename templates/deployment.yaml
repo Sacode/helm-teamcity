@@ -35,6 +35,13 @@ spec:
         app: {{ template "teamcity.name" . }}
         release: {{ .Release.Name }}
     spec:
+      initContainers:
+        - name: init-volume-owner
+          image: busybox
+          command: ["sh", "-c", "chown -R 1000:1000 /data/teamcity_server/datadir"]
+          volumeMounts:
+              - name:  server-data
+                mountPath: /data/teamcity_server/datadir
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -48,6 +55,10 @@ spec:
               protocol: TCP
           resources:
 {{ toYaml .Values.resources | indent 12 }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets | indent 8 }}
+      {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

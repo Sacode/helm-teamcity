@@ -20,6 +20,12 @@ agent:
       memory: 968Mi
   nodeSelector: {}
   priorityClassName: ""
+  dataStorage:
+    size: 10Gi
+    storageClass: null
+    accessMode: ReadWriteOnce
+    annotations: {}
+  dindStorageClass: null
 
 highmemagent:
   replicaCount: 0
@@ -36,7 +42,13 @@ highmemagent:
       memory: 16Gi
   nodeSelector: {}
   priorityClassName: ""
-  
+  dataStorage:
+    size: 10Gi
+    storageClass: null
+    accessMode: ReadWriteOnce
+    annotations: {}
+  dindStorageClass: null
+
 replicaCount: 1
 
 image:
@@ -63,16 +75,10 @@ ingress:
         - teamcity.local
 
 dataStorage:
-  # Size of the PVC created
   size: 10Gi
-  # Name of the storage class to use.  If null it will use the
-  # configured default Storage Class.
   storageClass: null
-  # Access Mode of the storage device being used for the PVC
   accessMode: ReadWriteOnce
-  # Annotations to apply to the PVC
   annotations: {}
-
 
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious

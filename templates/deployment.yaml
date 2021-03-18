@@ -17,15 +17,17 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: server-data
-        {{- include "vault.dataStorage.annotations" . | nindent 6 }}
+        {{- if .Values.dataStorage.annotations }}
+        {{- include ".Values.dataStorage.annotations" . | nindent 6 }}
+        {{- end }}
       spec:
         accessModes:
           - {{ .Values.dataStorage.accessMode | default "ReadWriteOnce" }}
         resources:
           requests:
             storage: {{ .Values.dataStorage.size }}
-          {{- if .Values.dataStorage.storageClass }}
-        storageClassName: {{ .Values.dataStorage.storageClass }}
+          {{- if .Values.dataStorage.storageClassName }}
+        storageClassName: {{ .Values.dataStorage.storageClassName }}
           {{- end }}
   template:
     metadata:

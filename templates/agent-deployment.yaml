@@ -17,12 +17,18 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: agent-data
+        {{- if .Values.agent.dataStorage.annotations }}
+        {{- include ".Values.agent.dataStorage.annotations" . | nindent 6 }}
+        {{- end }}
       spec:
-        accessModes: [ "ReadWriteOnce" ]
+        accessModes:
+          - {{ .Values.agent.dataStorage.accessMode | default "ReadWriteOnce" }}
         resources:
           requests:
-            storage: "10Gi"
-        storageClassName: "gp2"
+            storage: {{ .Values.agent.dataStorage.size }}
+          {{- if .Values.agent.dataStorage.storageClassName }}
+        storageClassName: {{ .Values.agent.dataStorage.storageClassName }}
+          {{- end }}
     - metadata:
         name: dind-certs-ca
       spec:
@@ -30,7 +36,7 @@ spec:
         resources:
           requests:
             storage: "10Mi"
-        storageClassName: "gp2"
+        storageClassName: {{ .Values.agent.dindStorageClass }}
     - metadata:
         name: dind-certs-client
       spec:
@@ -38,7 +44,7 @@ spec:
         resources:
           requests:
             storage: "10Mi"
-        storageClassName: "gp2"
+        storageClassName: {{ .Values.agent.dindStorageClass }}
   template:
     metadata:
       labels:

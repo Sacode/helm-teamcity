@@ -29,102 +29,39 @@ rbac:
           - watch
           - list
 
-# Agent configuration
-agent:
-  replicaCount: 1
-  image:
-    repository: jetbrains/teamcity-agent
-    tag: latest
-    pullPolicy: Always
-
-  ## Specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
-  imagePullSecrets: []
-
-  resources:
-    limits:
-      cpu: 800m
-      memory: 968Mi
-    requests:
-      cpu: 600m
-      memory: 968Mi
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
-  priorityClassName: ""
-  dataStorage:
-    size: 10Gi
-    storageClass: null
-    accessMode: ReadWriteOnce
-    annotations: {}
-  dindStorageClass: null
-
-highmemagent:
-  replicaCount: 0
-  image:
-    repository: jetbrains/teamcity-agent
-    tag: latest
-    pullPolicy: Always
-
-  ## Specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
-  imagePullSecrets: []
-
-  resources:
-    limits:
-      cpu: 800m
-      memory: 20Gi
-    requests:
-      cpu: 600m
-      memory: 16Gi
-  nodeSelector: {}
-  priorityClassName: ""
-  dataStorage:
-    size: 10Gi
-    storageClass: null
-    accessMode: ReadWriteOnce
-    annotations: {}
-  dindStorageClass: null
-
 replicaCount: 1
-
-# Server configuration
-server:
-  replicaCount: 1
-  image:
-    pullPolicy: IfNotPresent
-    repository: jetbrains/teamcity-server
-    version: 2018.1.5
-  resources:
-    limits:
-      cpu: 800m
-      memory: 968Mi
-    requests:
-      cpu: 600m
-      memory: 968Mi
-  # Application liveness probe settings
-  livenessProbe:
-    enabled: true
-    path: /js/polyfills.js
-    initialDelaySeconds: 180
-    failureThreshold: 10
-    timeoutSeconds: 10
-    periodSeconds: 10
-    successThreshold: 1
-  # Application readiness probe settings
-  readinessProbe:
-    enabled: true
-    path: /js/polyfills.js
-    initialDelaySeconds: 60
-    failureThreshold: 10
-    timeoutSeconds: 10
-    periodSeconds: 10
-    successThreshold: 1
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
+image:
+  pullPolicy: IfNotPresent
+  repository: jetbrains/teamcity-server
+  version: 2018.1.5
+resources:
+  limits:
+    cpu: 800m
+    memory: 968Mi
+  requests:
+    cpu: 600m
+    memory: 968Mi
+# Application liveness probe settings
+livenessProbe:
+  enabled: true
+  path: /js/polyfills.js
+  initialDelaySeconds: 180
+  failureThreshold: 10
+  timeoutSeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+# Application readiness probe settings
+readinessProbe:
+  enabled: true
+  path: /js/polyfills.js
+  initialDelaySeconds: 60
+  failureThreshold: 10
+  timeoutSeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+nodeSelector: {}
+tolerations: []
+affinity: {}
 
 ## Specify an array of imagePullSecrets.
 ## Secrets must be manually created in the namespace.
@@ -170,11 +107,5 @@ resources:
   requests:
     cpu: 600m
     memory: 968Mi
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
 
 priorityClassName: ""

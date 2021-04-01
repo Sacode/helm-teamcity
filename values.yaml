@@ -1,6 +1,35 @@
 # Default values for teamcity.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+
+## Service Account
+## Ref: https://kubernetes.io/docs/admin/service-accounts-admin/
+##
+serviceAccount:
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the "fullname" template
+  name:
+
+## Role Based Access Control
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+rbac:
+  create: true
+  role:
+    ## Rules to create. It follows the role specification
+    rules:
+      - apiGroups:
+          - ''
+        resources:
+          - services
+          - endpoints
+          - pods
+        verbs:
+          - get
+          - watch
+          - list
+
+# Agent configuration
 agent:
   replicaCount: 1
   image:
@@ -14,10 +43,6 @@ agent:
   imagePullSecrets: []
 
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits:
       cpu: 800m
       memory: 968Mi
@@ -25,6 +50,8 @@ agent:
       cpu: 600m
       memory: 968Mi
   nodeSelector: {}
+  tolerations: []
+  affinity: {}
   priorityClassName: ""
   dataStorage:
     size: 10Gi
@@ -63,10 +90,41 @@ highmemagent:
 
 replicaCount: 1
 
-image:
-  repository: jetbrains/teamcity-server
-  tag: latest
-  pullPolicy: Always
+# Server configuration
+server:
+  replicaCount: 1
+  image:
+    pullPolicy: IfNotPresent
+    repository: jetbrains/teamcity-server
+    version: 2018.1.5
+  resources:
+    limits:
+      cpu: 800m
+      memory: 968Mi
+    requests:
+      cpu: 600m
+      memory: 968Mi
+  # Application liveness probe settings
+  livenessProbe:
+    enabled: true
+    path: /js/polyfills.js
+    initialDelaySeconds: 180
+    failureThreshold: 10
+    timeoutSeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+  # Application readiness probe settings
+  readinessProbe:
+    enabled: true
+    path: /js/polyfills.js
+    initialDelaySeconds: 60
+    failureThreshold: 10
+    timeoutSeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 ## Specify an array of imagePullSecrets.
 ## Secrets must be manually created in the namespace.
@@ -74,22 +132,26 @@ image:
 imagePullSecrets: []
 
 service:
+  name: teamcity
   type: ClusterIP
+  loadBalancerIP:
   port: 8111
+  annotations: {}
 
 ingress:
-  enabled: true
+  enabled: false
+  defaultBackend:
+    enabled: true
   annotations:
-    kubernetes.io/ingress.class: nginx
-    kubernetes.io/tls-acme: "true"
-    nginx.ingress.kubernetes.io/proxy-body-size: 2000m
-  path: /
-  hosts:
-    - teamcity.local
-  tls: 
-    - secretName: teamcity.local
-      hosts:
-        - teamcity.local
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  # nginx.ingress.kubernetes.io/proxy-body-size: 2000m
+  # nginx.com/health-checks: "true"
+  path: /*
+  hosts: []
+  tls: []
+  # Put here any labels you'd like to see in the ingress configuration:
+  labels:
 
 dataStorage:
   size: 10Gi

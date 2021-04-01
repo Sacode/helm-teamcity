@@ -4,6 +4,7 @@ metadata:
   name: {{ template "teamcity.fullname" . }}
   labels:
     app: {{ template "teamcity.name" . }}
+    version: {{ .Values.server.image.version }}
     chart: {{ template "teamcity.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -43,16 +44,38 @@ spec:
               - name:  server-data
                 mountPath: /data/teamcity_server/datadir
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ template "teamcity.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             - name:  server-data
               mountPath: /data/teamcity_server/datadir
           ports:
-            - name: http
-              containerPort: 8111
+            - name: {{ template "teamcity.name" . }}-http
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
+{{- if .Values.server.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.server.readinessProbe.path }}
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: {{ .Values.server.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.server.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.server.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.server.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.server.readinessProbe.successThreshold }}
+{{- end }}
+{{- if .Values.server.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.server.livenessProbe.path }}
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.server.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.server.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.server.livenessProbe.successThreshold }}
+{{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       {{- if .Values.imagePullSecrets }}
@@ -61,13 +84,13 @@ spec:
       {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.affinity }}
+{{    toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.server.affinity }}
       affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
+{{    toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.server.tolerations }}
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}

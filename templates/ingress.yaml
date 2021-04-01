@@ -1,39 +1,46 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "teamcity.fullname" . -}}
-{{- $servicePort := .Values.service.port -}}
-{{- $ingressPath := .Values.ingress.path -}}
+{{-   $serviceName := include "teamcity.fullname" . -}}
+{{-   $servicePort := .Values.service.port -}}
+{{-   $ingressPath := .Values.ingress.path -}}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ $serviceName }}
   labels:
     app: {{ template "teamcity.name" . }}
+    version: {{ .Values.server.image.version }}
     chart: {{ template "teamcity.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-{{- with .Values.ingress.annotations }}
+{{-   if .Values.ingress.labels }}
+{{      toYaml .Values.ingress.labels | indent 4 }}
+{{-   end}}
+{{-   if .Values.ingress.annotations }}
   annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+{{-     range $key, $val := .Values.ingress.annotations }}
+{{        $key | indent 4 }}: {{ $val | quote }}
+{{-     end}}
+{{-   end }}
 spec:
-{{- if .Values.ingress.tls }}
-  tls:
-  {{- range .Values.ingress.tls }}
-    - hosts:
-      {{- range .hosts }}
-        - {{ . }}
-      {{- end }}
-      secretName: {{ .secretName }}
-  {{- end }}
-{{- end }}
+{{-   if .Values.ingress.defaultBackend.enabled }}
+  backend:
+    serviceName: {{ $serviceName }}
+    servicePort: {{ $servicePort }}
+{{-   end -}}
+{{-   if .Values.ingress.hosts }}
   rules:
-  {{- range .Values.ingress.hosts }}
-    - host: {{ . }}
+{{-     range $host := .Values.ingress.hosts }}
+    - host: {{ $host | quote }}
       http:
         paths:
           - path: {{ $ingressPath }}
             backend:
-              serviceName: {{ $fullName }}
-              servicePort: http
-  {{- end }}
-{{- end }}
+              serviceName: {{ $serviceName }}
+              servicePort: {{ $servicePort }}
+{{-     end -}}
+{{-   end -}}
+{{-   if .Values.ingress.tls }}
+  tls:
+{{      toYaml .Values.ingress.tls | indent 4 }}
+{{-   end -}}
+{{- end -}}

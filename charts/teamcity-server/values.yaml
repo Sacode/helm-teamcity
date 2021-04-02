@@ -91,12 +91,25 @@ rbac:
       - apiGroups:
           - ""
         resources:
-          - services
-          - endpoints
+          - namespaces
+        verbs:
+          - list
+      - apiGroups:
+          - ""
+        resources:
           - pods
         verbs:
+          - create
           - get
           - watch
+          - list
+          - delete
+      - apiGroups:
+          - "apps"
+        resources:
+          - deployments
+        verbs:
+          - get
           - list
 
 nodeSelector: {}

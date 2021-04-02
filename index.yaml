@@ -3,9 +3,9 @@ entries:
   teamcity:
   - apiVersion: v2
     appVersion: 2020.2.3
-    created: "2021-04-02T08:37:42.2795955+03:00"
+    created: "2021-04-02T08:43:50.039207+03:00"
     description: A Helm chart for deployment TeamCity CI and CD server
-    digest: f4e92a067213a8b58f63a7cbb7a36c4875c3519acc88b364ae1b560d39f2691c
+    digest: 175d0ef34813d3cbaee062b8d2d0ec011254f54decadf615fafb70003acc622c
     home: https://jetbrains.com/teamcity/
     icon: https://i1.wp.com/www.stefreitag.de/wp/wp-content/uploads/2018/08/logo.png?fit=512%2C512&ssl=1
     maintainers:
@@ -16,6 +16,6 @@ entries:
     - github.com/Sacode/helm-teamcity/
     type: application
     urls:
-    - charts/teamcity-0.1.3.tgz
-    version: 0.1.3
-generated: "2021-04-02T08:37:42.2785965+03:00"
+    - charts/teamcity-0.1.4.tgz
+    version: 0.1.4
+generated: "2021-04-02T08:43:50.0382093+03:00"

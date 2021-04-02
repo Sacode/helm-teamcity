@@ -10,7 +10,9 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "2020.2.3"
 
-teamcityJavaOpts: "" # example: "-Xmx1g -Xms1g"
+teamcity:
+  serverMemOpts: "" # example: "-Xmx1g -Xms1g"
+  httpsProxyEnabled: false
 
 imagePullSecrets: []
 nameOverride: ""

@@ -60,7 +60,9 @@ spec:
               mountPath: /data/teamcity_server/datadir
           env:
             - name: TEAMCITY_SERVER_MEM_OPTS
-              value: "{{ .Values.teamcityJavaOpts }}"
+              value: "{{ .Values.teamcity.serverMemOpts }}"
+            - name: TEAMCITY_HTTPS_PROXY_ENABLED
+              value: "{{ .Values.teamcity.httpsProxyEnabled }}"              
           ports:
             - name: http
               containerPort: 8111
